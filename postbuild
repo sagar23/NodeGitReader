@@ -1,0 +1,31 @@
+const fs = require('fs');
+
+// Read the content of index.html
+const filePath = 'D:/Projects/fiserv/DoG_Gallery/src/index.html';
+
+fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+        console.error('Error reading the file:', err);
+        return;
+    }
+    console.error('running::::::::::',);
+
+    // Define a regular expression to match script tags with src attribute
+    const scriptTagRegex = /<script.*?src=["'](.*?)["'][^>]*><\/script>/gi;
+
+    // Replace the script tags with src attribute with the same tag appended with 'defer'
+    const modifiedData = data.replace(scriptTagRegex, (match, src) => {
+        const newScriptTag = `<script src="${src}" defer></script>`;
+        return newScriptTag;
+    });
+
+    // Write the modified content back to index.html
+    fs.writeFile(filePath, modifiedData, 'utf8', (err) => {
+        if (err) {
+            console.error('Error writing the file:', err);
+            return;
+        }
+
+        console.log('Script tags with src attributes replaced with defer attribute.');
+    });
+});
